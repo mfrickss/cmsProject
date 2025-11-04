@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  # 1. O serviço da sua API (FastAPI)
+  web:
+    build: ./backend # Aponta para a pasta com o Dockerfile
+    ports:
+      - "8000:8000" # Mapeia a porta do container para sua máquina local
+    volumes:
+      - ./backend:/code # Monta seu código local no container (para reload)
+    environment:
+      # Variáveis de ambiente que seu app usará para se conectar
+      - DATABASE_URL=postgresql://user:password@db/mydatabase
+      - REDIS_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+    networks:
+      - cms_network
+
+  # 2. O serviço do Banco de Dados (PostgreSQL)
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    networks:
+      - cms_network
+
+  # 3. O serviço de Cache (Redis)
+  cache:
+    image: redis:7
+    networks:
+      - cms_network
+
+# Volumes para persistir os dados
+volumes:
+  postgres_data:
+
+# Rede para os containers se comunicarem
+networks:
+  cms_network:
+    driver: bridge
