@@ -17,6 +17,9 @@ services:
     environment:
       - DATABASE_URL=postgresql://user:password@db/mydatabase
       - REDIS_URL=redis://cache:6379
+      - SECRET_KEY=f6a4eae8565ba11f29cc40de8fb2356fdd3ef477d3773802d641101cb909c58d
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=600
     depends_on:
       - db
       - cache
