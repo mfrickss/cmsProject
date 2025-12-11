@@ -1,4 +1,4 @@
-from models import User 
-from models import Post
+from app.models.user import User 
+from app.db.session import Base
 
-__all__  = ["User", "Post"]
+__all__  = ["User", "Base"]

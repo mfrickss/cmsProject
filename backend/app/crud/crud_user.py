@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from models import User
-from schemas import UserCreate
+from app.models import User
+from app.schemas import UserCreate
 from core.security import get_password_hash, verify_password
-from base import CRUDBase
+from app.crud.base import CRUDBase
 
 class CRUDUser(CRUDBase[User]):
     def __init__(self):

@@ -3,6 +3,13 @@ services:
     build: 
       context: ./backend 
       network: host
+      args:
+        - HTTP_PROXY=${HTTP_PROXY}
+        - HTTPS_PROXY=${HTTPS_PROXY}
+        - NO_PROXY=${NO_PROXY}
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "8000:8000" 
     volumes:
@@ -10,7 +17,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql://user:password@db/mydatabase
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
       - REDIS_URL=redis://cache:6379
     depends_on:
       - db
