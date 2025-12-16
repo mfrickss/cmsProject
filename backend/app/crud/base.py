@@ -1,4 +1,4 @@
-from sqlalchemy import Session 
+from sqlalchemy.orm import Session
 from typing import TypeVar, Generic, Type, Optional, List
 
 T = TypeVar('T')

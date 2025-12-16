@@ -3,12 +3,12 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from db.session import get_db
-from models import User
-from core.security import decode_token
-from crud import crud_user
+from app.db.session import get_db
+from app.models.user import User
+from app.core.security import decode_token
+from app.crud.crud_user import crud_user
 
-oauth2_scheme = OAuth2PasswordBearer(token="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],

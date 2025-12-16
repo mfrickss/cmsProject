@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 
 from .config import settings
 
-pwd_context = CryptContext(schemas=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password: str) -> str:
     """Faz o Hash da senha com bcrypt."""

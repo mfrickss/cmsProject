@@ -9,3 +9,4 @@ passlib[bcrypt]  # Para hashing de senhas
 pyjwt
 pydantic[email]  # Para validação de email
 python-multipart
+python-jose[cryptography]
