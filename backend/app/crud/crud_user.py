@@ -8,7 +8,7 @@ class CRUDUser(CRUDBase[User]):
     def __init__(self):
         super().__init__(User)
 
-    def get_by_email(self, db: Session, email: str) -> User | None:
+    def get_user_by_email(self, db: Session, email: str) -> User | None:
         """Busca um usuário pelo email."""
         return db.query(self.model).filter(self.model.email == email).first()
     
@@ -30,16 +30,16 @@ class CRUDUser(CRUDBase[User]):
 
         return db_user
     
-    def authenticate(self, db: Session, email: str, password: str) -> User | None:
+    def authenticate_user(self, db: Session, email: str, password: str) -> User | None:
         """Autentica o usuário verificando email e senha."""
 
-        user = self.get_by_email(db, email)
+        user = self.get_user_by_email(db, email)
 
-        if not User:
+        if not user:
             return None
         if not verify_password(password, user.hashed_password):
             return None
         
         return user
-    
+
 crud_user = CRUDUser()

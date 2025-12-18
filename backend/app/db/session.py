@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
 from sqlalchemy.ext.declarative import declarative_base
+from typing import Generator
 
 
 from app.core.config import settings
@@ -19,11 +20,12 @@ try:
         bind=engine
     )
     Base = declarative_base()
+
 except Exception as e:
     print(f"Erro ao conectar ao banco: {e}")
     raise
 
-def get_db() -> Session:
+def get_db() -> Generator[Session, None, None]:
     """Dependency para obter a sessão do db."""
     db = SessionLocal()
     try:

@@ -32,7 +32,7 @@ async def get_current_user(
     if email is None:
         raise credentials_exception
     
-    user = crud_user.get_by_email(db, email=email)
+    user = crud_user.get_user_by_email(db, email=email)
     if user is None:
         raise credentials_exception
     

@@ -21,7 +21,7 @@ def register(
     db: Annotated[Session, Depends(get_db)]
 ):
     """Registra um novo usuário."""
-    db_user = crud_user.get_by_email(db, email=user.email)
+    db_user = crud_user.get_user_by_email(db, email=user.email)
     if db_user: 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -41,7 +41,7 @@ def login(
     Retorna token se credênciais válidas.
     """
 
-    user = crud_user.authenticate(db=db, email=form_data.username, password=form_data.password)
+    user = crud_user.authenticate_user(db=db, email=form_data.username, password=form_data.password)
 
     if not user:
         raise HTTPException(
