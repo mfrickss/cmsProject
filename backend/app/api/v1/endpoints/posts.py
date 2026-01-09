@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
-from app.schemas.post import PostCreate, PostOut
+from app.schemas.post import PostCreate, PostOut, PostUpdate
 from app.crud.crud_post import crud_post
 
 router = APIRouter()
@@ -21,6 +21,7 @@ def read_posts(
     Qualquer pessoa(logada ou não) pode ver.
     """
     posts = crud_post.get_all(db, skip=skip, limit=limit)
+    ""
     return posts
 
 @router.post("/", response_model=PostOut)
@@ -44,7 +45,7 @@ def create_post(
 @router.delete("/{id}", response_model=PostOut)
 def delete_post(
     *,
-    db: Annotated[Session, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
     id: int, 
     current_user: Annotated[User, Depends(get_current_user)]
 ):
@@ -64,3 +65,26 @@ def delete_post(
 
     return post
     
+@router.put("/{id}", response_model=PostOut)
+def update_post(
+    *,
+    db: Annotated[Session, Depends(get_db)],
+    id: int,
+    post_in: PostUpdate,
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    """
+    Atualiza um post existente.
+    Somente o dono do post pode editá-lo.
+    """
+
+    post = crud_post.get(db=db, id=id)
+
+    if not post:
+        raise HTTPException(status_code=404, detail="Post não encontrado")
+    
+    if post.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Você não tem permissão para editar esse post.")
+    
+    post = crud_post.update(db=db, db_obj=post, obj_in=post_in)
+    return post

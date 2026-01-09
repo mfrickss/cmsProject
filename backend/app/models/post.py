@@ -13,4 +13,4 @@ class Post(Base):
     content: Mapped[str] = mapped_column(nullable=False)
 
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    owner: Mapped["User"] = relationship
+    owner: Mapped["User"] = relationship()

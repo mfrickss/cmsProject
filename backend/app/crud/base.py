@@ -13,11 +13,11 @@ class CRUDBase(Generic[T]):
     def get_all(self, db: Session, skip: int = 0, limit: int = 100) -> List[T]:
         return db.query(self.model).offset(skip).limit(limit).all()
     
-    def crate(self, db: Session, obj_in: dict) -> T:
+    def create(self, db: Session, obj_in: dict) -> T:
         db_obj = self.model(**obj_in)
         db.add(db_obj)
         db.commit()
-        db.refresh()
+        db.refresh(db_obj)
         return db_obj
     
     def update(self, db: Session, db_obj: T, obj_in: dict) -> T:
